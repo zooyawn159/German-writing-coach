@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deutsch Lernkarten</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Sans+KR:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1916;
+    --card-front: #1e1d1a;
+    --card-back: #16201a;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --green: #4a9e6b;
+    --red: #c0524a;
+    --text: #e8e4d9;
+    --text-dim: #8a8578;
+    --border: #2e2c27;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    color: var(--gold);
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+  }
+
+  header p {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    font-weight: 300;
+    letter-spacing: 0.08em;
+  }
+
+  .stats-bar {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 36px;
+    font-size: 0.82rem;
+    letter-spacing: 0.06em;
+  }
+
+  .stat {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    color: var(--text-dim);
+  }
+
+  .stat-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+
+  .stat-dot.total { background: var(--text-dim); }
+  .stat-dot.known { background: var(--green); }
+  .stat-dot.unknown { background: var(--red); }
+
+  .stat span { color: var(--text); font-weight: 500; }
+
+  /* progress bar */
+  .progress-wrap {
+    width: min(520px, 90vw);
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 36px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* CARD */
+  .scene {
+    width: min(520px, 92vw);
+    height: 320px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 28px;
+  }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card.flipped { transform: rotateY(180deg); }
+
+  .face {
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    backface-visibility: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 36px 40px;
+    border: 1px solid var(--border);
+  }
+
+  .face-front {
+    background: var(--card-front);
+  }
+
+  .face-back {
+    background: var(--card-back);
+    transform: rotateY(180deg);
+    border-color: #2a3830;
+  }
+
+  .card-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .card-word {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    color: var(--gold-light);
+    text-align: center;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+
+  .card-hint {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  .card-meaning {
+    font-size: clamp(1rem, 3vw, 1.25rem);
+    color: var(--text);
+    text-align: center;
+    line-height: 1.6;
+    margin-bottom: 18px;
+    white-space: pre-line;
+  }
+
+  .card-example {
+    font-size: 0.78rem;
+    color: var(--text-dim);
+    text-align: center;
+    line-height: 1.7;
+    font-style: italic;
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    width: 100%;
+  }
+
+  /* BUTTONS */
+  .btn-row {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+
+  .btn {
+    padding: 12px 32px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    letter-spacing: 0.04em;
+  }
+
+  .btn-known {
+    background: var(--green);
+    color: #fff;
+  }
+
+  .btn-unknown {
+    background: var(--red);
+    color: #fff;
+  }
+
+  .btn-known:hover { background: #5ab87c; transform: translateY(-1px); }
+  .btn-unknown:hover { background: #d4635a; transform: translateY(-1px); }
+
+  .btn-nav {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 10px 20px;
+    font-size: 0.8rem;
+  }
+
+  .btn-nav:hover { border-color: var(--gold); color: var(--gold); }
+
+  .nav-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .card-counter {
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    min-width: 80px;
+    text-align: center;
+    letter-spacing: 0.08em;
+  }
+
+  /* result screen */
+  .result-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+    padding: 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    width: min(520px, 92vw);
+  }
+
+  .result-screen.show { display: flex; }
+
+  .result-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--gold);
+  }
+
+  .result-numbers {
+    display: flex;
+    gap: 32px;
+  }
+
+  .result-num {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .result-num .big {
+    font-size: 2.4rem;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .result-num .label {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .result-num.known .big { color: var(--green); }
+  .result-num.unknown .big { color: var(--red); }
+
+  .btn-restart {
+    background: var(--gold);
+    color: #0f0e0c;
+    font-weight: 700;
+    padding: 13px 40px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    border: none;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: background 0.2s;
+  }
+
+  .btn-restart:hover { background: var(--gold-light); }
+
+  .flip-hint {
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-top: -18px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Deutsch Lernkarten</h1>
+  <p>C1 어휘 플래시카드 · 86 단어</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-dot total"></div>전체 <span id="total-count">86</span></div>
+  <div class="stat"><div class="stat-dot known"></div>알았다 <span id="known-count">0</span></div>
+  <div class="stat"><div class="stat-dot unknown"></div>몰랐다 <span id="unknown-count">0</span></div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<!-- card -->
+<div class="scene" id="scene" onclick="flipCard()">
+  <div class="card" id="card">
+    <div class="face face-front">
+      <div class="card-label">Deutsch</div>
+      <div class="card-word" id="front-word">abbauen</div>
+      <div class="card-hint">클릭하여 뜻 확인</div>
+    </div>
+    <div class="face face-back">
+      <div class="card-label">한국어</div>
+      <div class="card-meaning" id="back-meaning">채굴하다</div>
+      <div class="card-example" id="back-example">예문이 여기에 표시됩니다.</div>
+    </div>
+  </div>
+</div>
+
+<p class="flip-hint">↑ 카드를 클릭하면 뒤집힙니다</p>
+
+<div class="btn-row">
+  <button class="btn btn-unknown" onclick="markCard(false)">✕ 몰랐다</button>
+  <button class="btn btn-known" onclick="markCard(true)">✓ 알았다</button>
+</div>
+
+<div class="nav-row">
+  <button class="btn btn-nav" onclick="prevCard()">← 이전</button>
+  <div class="card-counter" id="counter">1 / 86</div>
+  <button class="btn btn-nav" onclick="nextCard()">다음 →</button>
+</div>
+
+<!-- result -->
+<div class="result-screen" id="result-screen">
+  <div class="result-title">학습 완료!</div>
+  <div class="result-numbers">
+    <div class="result-num known">
+      <div class="big" id="result-known">0</div>
+      <div class="label">알았다</div>
+    </div>
+    <div class="result-num unknown">
+      <div class="big" id="result-unknown">0</div>
+      <div class="label">몰랐다</div>
+    </div>
+  </div>
+  <button class="btn-restart" onclick="restart()">다시 시작</button>
+</div>
+
+<script>
+const words = [
+  {"word":"abbauen","meaning":"채굴하다, 철거하다, 축소하다, 해고하다, (능력이) 감퇴하다","example":"Die Folge ist, dass die Energien, die vom Körper bereitgestellt werden, nicht verbraucht werden und daher durch andere Aktivitäten abgebaut werden müssen, z.B. durch regelmäßigen Sport"},
+  {"word":"ablaufen","meaning":"시간·기한 관련 → 만료되다, 끝나다\n과정·절차 관련 → 진행되다, 실행되다\n물리적 흐름 관련 → 흘러가다, 떨어지다","example":"Dieses urlate und sehr erfolgreiche Programm läuft auch heute noch ab, wenn wir Stress erleben"},
+  {"word":"ablegen","meaning":"to put aside, to take off","example":"Referate und Hausarbeiten sind zu bewältigen und Prüfungen sollen möglichst erfolgreich abgelegt werden"},
+  {"word":"abschaffen","meaning":"to abolish","example":"Immer mehr Hochschulen schaffen für immer mehr Studienfächer Lateinkenntnisse als Zugangsvoraussetzung ab"},
+  {"word":"Alarmismus","meaning":"기우, 지나친 경고","example":"Fragt man nach Ursachen und differenziert, oder setzt man auf Alarmismus, nach dem Motto \"der Islamismus unterwandert Deutschland\""},
+  {"word":"Altersgenosse","meaning":"같은 연배의 사람","example":"Latein lernende Schülerinnen und Schüler scheinen keinen Vorteil gegenüber Altersgenossen zu haben, die in derselben Zeit eine moderne Fremdsprache gelernt haben"},
+  {"word":"angeblich","meaning":"alleged, reported","example":"Wer Latein lernt, erwirbt angeblich auf ein besseres Verständnis der Muttersprache und kann die Grammatik der eigenen Sprache sicherer anwenden"},
+  {"word":"angemessen","meaning":"appropriate","example":"Was dem öffentlich-rechtlichen Rundfunk angemessen ist, scheint klar"},
+  {"word":"anhaltend","meaning":"지속되는 lasting, enduring","example":"Eine mögliche Folge ist das so genannte \"Burn-out-Syndrom\", ein anhaltender und schwerer Erschöpfungszustand"},
+  {"word":"Annahme","meaning":"획득, 추측","example":"Diese Annahmen sind jedoch nicht durch empirische Befunde gedeckt, vielmehr werden sie durch aktuelle Forschungsergebnisse als Mythos entlarvt"},
+  {"word":"auf dem Rückzug","meaning":"후퇴 중인, 끝나가고 있는","example":"Und auch an den Unis ist Latein auf dem Rückzug"},
+  {"word":"auf Knopfdruck","meaning":"쉽게","example":"Wie auf Knopfdruck scheint die Stadt wie ausgetauscht."},
+  {"word":"aufsuchen","meaning":"방문하다, 찾아내다","example":"Die steigende Zahl von Studierenden, die die psychologischen Beratungsstellen der Hochschulen aufsuchen, ist dafür ebenfalls ein deutlicher Beweis"},
+  {"word":"aufweisen","meaning":"(흔적, 특성을) 보인다, 나타낸다, 제시한다","example":"Das erkläre sich vor allen daraus, dass Sprachen wie Spanisch oder Italienisch aus dem Lateinischen entstanden sind und deshalb immer noch große Ähnlichkeiten mit Latein aufweisen"},
+  {"word":"Auseinandersetzung","meaning":"토론, 충돌","example":"In der Auseinandersetzung mit diesen Werken im Lateinunterricht werden diese Wurzeln und damit auch die übernationale Prägung unserer gegenwärtigen Kultur und Zivilisation sichtbar"},
+  {"word":"auslösen","meaning":"to trigger","example":"Der Trailer, der vor wenigen Tagen herauskam, löste so manche Enttäuschung aus"},
+  {"word":"ausspucken","meaning":"to spit out","example":"unhinterfragt ausspuckt und somit weiter zementiert"},
+  {"word":"austauschen","meaning":"to replace","example":"Wie auf Knopfdruck scheint die Stadt wie ausgetauscht."},
+  {"word":"bedenklich","meaning":"심상치 않은","example":"Aber entscheidend scheint mir der publizistische Umgang mit solchen bedenklichen Phänomenen"},
+  {"word":"Beeinträchtigung","meaning":"피해, 침해","example":"So kann es langfristig zu deutlichen Beeinträchtigungen der körperlichen Gesundheit kommen"},
+  {"word":"Befund","meaning":"findings, result","example":"Diese Annahmen sind jedoch nicht durch empirische Befunde gedeckt, vielmehr werden sie durch aktuelle Forschungsergebnisse als Mythos entlarvt"},
+  {"word":"Befürworter","meaning":"지지자","example":"Ja, sicherlich, aber es sind nicht die, die einem von den Befürwortern von Latein entgegengerufen werden"},
+  {"word":"Bekanntschaft","meaning":"acquaintance","example":"Die Bekanntschaft mit der antiken Welt, die der unseren in vielen Aspekten so ähnlich und gleichzeitig so ganz anders ist, kann zur Reflexion der eigenen Lebenswirklichkeit anregen"},
+  {"word":"Beratungsstelle","meaning":"상담소","example":"Die steigende Zahl von Studierenden, die die psychologischen Beratungsstellen der Hochschulen aufsuchen, ist dafür ebenfalls ein deutlicher Beweis"},
+  {"word":"berechtigt","meaning":"권리가 있는, 정당한","example":"Und ihre Fragen scheinen berechtigt"},
+  {"word":"bereitstellen","meaning":"준비하다","example":"Die Folge ist, dass die Energien, die vom Körper bereitgestellt werden, nicht verbraucht werden"},
+  {"word":"Berichterstattung","meaning":"journalism, reporting","example":"Eine differenzierte Berichterstattung beobachtet, die die Fakten auch einordnete"},
+  {"word":"Betrachtung","meaning":"contemplation","example":"Nur wenn Sprachbetrachtung und Sprachreflexion gefördert werden, entfalten sich die wahren Vorteile, die Latein haben kann"},
+  {"word":"Betroffene","meaning":"당사자","example":"Sie sind nicht die einzigen Betroffenen"},
+  {"word":"bewältigen","meaning":"to cope with","example":"Referate und Hausarbeiten sind zu bewältigen und Prüfungen sollen möglichst erfolgreich abgelegt werden"},
+  {"word":"Beweis (r)","meaning":"countable proof","example":"Die Tage um den 1. Mai herum lieferten für diese Doppelidentität mal wieder den besten Beweis."},
+  {"word":"drängen","meaning":"to press, to push","example":"Alles drängt ins Freie, vor jedem Späti stehen plötzlich ein paar Hocker auf der Straße"},
+  {"word":"eigenständig","meaning":"독자적으로","example":"Weil sie eben nicht eigenständig kritisch denken kann"},
+  {"word":"einfangen","meaning":"to capture","example":"Der ehemalige Berliner Kultursenator Klaus Lederer fängt in seinem aktuellen Text für uns wunderbar präzise beides ein"},
+  {"word":"empirisch","meaning":"경험에 근거한","example":"Diese Annahmen sind jedoch nicht durch empirische Befunde gedeckt, vielmehr werden sie durch aktuelle Forschungsergebnisse als Mythos entlarvt"},
+  {"word":"empören","meaning":"선동하다, 부추기다","example":"Der skandalisierende Umgang mit dem Thema empörte Eltern und Schulleitung gleichermaßen"},
+  {"word":"entgegenrufen","meaning":"소리쳐 말하다","example":"Ja, sicherlich, aber es sind nicht die, die einem von den Befürwortern von Latein entgegengerufen werden"},
+  {"word":"entlarven","meaning":"정체를 드러내다, 실체를 폭로하다","example":"Diese Annahmen sind jedoch nicht durch empirische Befunde gedeckt, vielmehr werden sie durch aktuelle Forschungsergebnisse als Mythos entlarvt"},
+  {"word":"ermitteln","meaning":"색출하다","example":"Gleichzeitig bedroht KI die Jobs von den Menschen, die diese Bedarfe ermitteln"},
+  {"word":"es fällt 3 schwer","meaning":"3한테 힘들다","example":"Nach solch schönen Tagen fällt es naturgemäß schwer, wieder in den Trott der Angst von Klimakatastrophe zu kommen"},
+  {"word":"es ist soweit","meaning":"때가 됐다","example":"Am 16. Juli 2026 ist es soweit."},
+  {"word":"Gegebenheit","meaning":"주어진 사실","example":"Was den besonderen Geist der Berliner Kulturlandschaft ausmacht und wie eine Politik aussehen sollte, die unter den neuen Gegebenheiten gestalten will."},
+  {"word":"handfest","meaning":"strong, sturdy, tangible","example":"Aber gibt es nicht handfeste Vorteile von Latein?"},
+  {"word":"häufen sich","meaning":"쌓이다","example":"Seit OpenAI im November 2022 mit ChatGPT erstmals ein Large Language Model vorgestellt hat, häufen sich die Erkenntnisse darüber"},
+  {"word":"hervorrufen","meaning":"to arouse, to evoke","example":"Diese können unterschiedliche physische und psychische Symptome hervorrufen"},
+  {"word":"hinterfragen","meaning":"배후, 배경을 묻다","example":"unhinterfragt ausspuckt und somit weiter zementiert"},
+  {"word":"in Gang bringen","meaning":"(어떤 것을) 작동시키다, 시작하다","example":"Lateinunterricht bietet eine Art neutralen Raum, der das Nachdenken über Sprache und Sprachenlernen in Gang bringen kann"},
+  {"word":"kommen zur Überzeugung","meaning":"(충분한 생각이나 증거를 통해) 확신에 이르다","example":"Immer mehr Hochschulen kommen zu der Überzeugung, dass ein Studium auch ohne Latein seriös zu stemmen ist"},
+  {"word":"labil","meaning":"unstable","example":"Schnell entsteht der Eindruck, labil zu sein"},
+  {"word":"leugnen","meaning":"to deny","example":"Niemand sollte leugnen, dass es junge Menschen gibt, die sich in einer Straßenumfrage für die Scharia aussprechen"},
+  {"word":"mit3 einhergehen","meaning":"3을 동반하다, 3과 결부되어 있다","example":"In seiner mangelnden Alltagstauglichkeit und seiner Zweckfreiheit, die mit einer hohen Komplexität einhergehen, verlangt Latein Genauigkeit"},
+  {"word":"moderieren","meaning":"진행하다","example":"Für den BR moderiert eben Julia Ruhs"},
+  {"word":"plädieren","meaning":"옹호하다, 변호하다","example":"In Nachbereitung zur Debatte plädiert Radisch dafür, \"die LeserInnen kuratiert zu überfordern\""},
+  {"word":"raunen","meaning":"중얼+속삭거리다","example":"Bedeutungsvoll raunende Szenen zeigen, wie Troja fällt und man in Ithaka auf die Rückkehr von Odysseus wartet"},
+  {"word":"setzen auf 4","meaning":"지나친 ~~를 일으키다, 조장하다","example":"Fragt man nach Ursachen und differenziert, oder setzt man auf Alarmismus, nach dem Motto \"der Islamismus unterwandert Deutschland\""},
+  {"word":"sich anpassen an 4","meaning":"4에 적응하다","example":"Schönheit ist damit kein Ideal, das man erreichen kann, sondern eine Norm, der man sich anpasst"},
+  {"word":"sich auftürmen","meaning":"우뚝 솟다","example":"Ein riesiger Berg an Dingen, die zu erledigen sind, türmt sich auf"},
+  {"word":"sich aussprechen über 4","meaning":"4에 대해 자신의 의견을 표명하다","example":"Niemand sollte leugnen, dass es junge Menschen gibt, die sich in einer Straßenumfrage für die Scharia aussprechen"},
+  {"word":"sich entfalten","meaning":"전개되다, 발전하다, 펼쳐지다","example":"Nur wenn Sprachbetrachtung und Sprachreflexion gefördert werden, entfalten sich die wahren Vorteile, die Latein haben kann"},
+  {"word":"sich entziehen","meaning":"기피하다","example":"Als sogenannte tote Sprache entziehen sich Latein tatsächlich einer direkten Verwertbarkeit"},
+  {"word":"sich mit 3 auseinandersetzen","meaning":"3과 대결하다, 씨름하다","example":"Das gehört überhaupt alles wesentlich dazu, wo man sich ernsthaft mit Kultur auseinandersetzt."},
+  {"word":"sich mit 3 versorgen","meaning":"3을 갖추다","example":"Das sollte ihn in Stresssituationen mit Energie versorgen, die ihm helfen, im Falle einer Bedrohung zu flüchten oder zu kämpfen"},
+  {"word":"Stellenwert","meaning":"비중, 위치, rating","example":"Ist angesichts der ohnehin übervollen Lehrpläne der zentrale Stellenwert des Fachs Latein noch zeitgemäß?"},
+  {"word":"stoßen auf 4","meaning":"4와 우연히 만나다, 맞닥뜨리다","example":"Vor ein paar Jahren stieß ich in den sozialen Medien auf den Kommentar eines Neu-Berliners"},
+  {"word":"Tauglichkeit","meaning":"쓸모 있음, 유용성","example":"In seiner mangelnden Alltagstauglichkeit und seiner Zweckfreiheit, die mit einer hohen Komplexität einhergehen, verlangt Latein Genauigkeit"},
+  {"word":"überfordern","meaning":"과도한 요구를 하다","example":"In Nachbereitung zur Debatte plädiert Radisch dafür, \"die LeserInnen kuratiert zu überfordern\""},
+  {"word":"überwiegend","meaning":"지배적인","example":"Das sind überwiegend Frauen"},
+  {"word":"unterwandern","meaning":"타민족이 이주하면서 어떤 민족의 고유 성격을 서서히 변화시키다","example":"Noch immer beschäftigt uns die Klar-Sendung \"Wo der Islamismus Deutschland unterwandert\""},
+  {"word":"uralt","meaning":"대단히 오래 된","example":"Dieses uralte und sehr erfolgreiche Programm läuft auch heute noch ab, wenn wir Stress erleben"},
+  {"word":"verankern","meaning":"배를 닻으로 고정시키다","example":"Sie liegen tief verankert in unserer patriarchalen Gesellschaft, deren Strukturen KI lernt"},
+  {"word":"verkümmern","meaning":"방해하다, 성장이 정지되다","example":"Latein kann genauso die Freude am Sprachenlernen zerstören und die Kommunikationsfunktion von Sprache verkümmern lassen"},
+  {"word":"vermeintlich","meaning":"잘못 추정된","example":"In Nachbereitung zur Debatte um Denis Scheck und den vermeintlichen Sexismus im Literaturbetrieb"},
+  {"word":"verraten","meaning":"to betray, to reveal","example":"Niemand hat mir verraten, dass das zwei verschiedene Städte sind, Berlin und Sommerberlin!"},
+  {"word":"Verwertbarkeit","meaning":"사용성","example":"Als sogenannte tote Sprache entziehen sich Latein tatsächlich einer direkten Verwertbarkeit"},
+  {"word":"vielschichtig","meaning":"다층적인","example":"Wie Nora schreibt, führt das zu vielschichtiger Diskriminierung"},
+  {"word":"vollstopfen","meaning":"가득 채우다","example":"eine Schulwelt, die immer weiter vollgestopft wird mit immer neuen zu erwerbenden Kompetenzen"},
+  {"word":"vorenthalten","meaning":"내주지 않다, 침묵하다","example":"Die Intelligenz unserer Kinder ist laut aktuellen Forschungsergebnissen also nicht bedroht, enthält man ihnen Latein vor"},
+  {"word":"Vorfreude","meaning":"기대에 찬 즐거움","example":"Aber so schnell lässt sich meine Vorfreude nicht klein kriegen"},
+  {"word":"wegrationalisieren","meaning":"합리화 조치를 통해 인력을 감축하다","example":"Gerade Berufe, in denen überdurchschnittlich viele Frauen arbeiten, werden als erste wegrationalisiert"},
+  {"word":"werden zu 3","meaning":"3으로 변화시키다","example":"Der Körper wird dabei zu einem Projekt. Und zum Problem."},
+  {"word":"wissen nicht wo einem der Kopf steht","meaning":"너무 바쁘거나 정신이 없어 뭐부터 해야할지 모른다","example":"Man weiß nicht mehr, wo einem der Kopf steht"},
+  {"word":"wurzeln","meaning":"to be rooted","example":"In der Antike wurzelt die westliche Kultur, sie brachte literarische, rhetorische und philosophische Meisterwerke hervor"},
+  {"word":"zementieren","meaning":"시멘트로 고정시키다, 고착화시키다","example":"unhinterfragt ausspuckt und somit weiter zementiert"},
+  {"word":"Zugangsvoraussetzung","meaning":"입학 조건","example":"Immer mehr Hochschulen schaffen für immer mehr Studienfächer Lateinkenntnisse als Zugangsvoraussetzung ab"},
+  {"word":"zurückschalten","meaning":"to switch back, to turn back / 제자리로 되돌리다","example":"Dann gelingt es dem Körper selbst in Erholungsphasen nicht mehr, auf ein Ruheniveau zurückzuschalten"},
+  {"word":"zwangsläufig","meaning":"강제적인","example":"Und auch der Weg zu gutem Deutsch muss nicht zwangsläufig über Latein führen"}
+];
+
+let current = 0;
+let known = 0;
+let unknown = 0;
+let answered = new Array(words.length).fill(null);
+let isFlipped = false;
+
+function render() {
+  const w = words[current];
+  document.getElementById('front-word').textContent = w.word;
+  document.getElementById('back-meaning').textContent = w.meaning;
+  document.getElementById('back-example').textContent = w.example;
+  document.getElementById('counter').textContent = `${current + 1} / ${words.length}`;
+
+  // reset flip
+  const card = document.getElementById('card');
+  card.classList.remove('flipped');
+  isFlipped = false;
+
+  updateStats();
+}
+
+function flipCard() {
+  const card = document.getElementById('card');
+  isFlipped = !isFlipped;
+  card.classList.toggle('flipped', isFlipped);
+}
+
+function markCard(isKnown) {
+  if (answered[current] === null) {
+    answered[current] = isKnown;
+    if (isKnown) known++; else unknown++;
+  } else {
+    // update if changed
+    const prev = answered[current];
+    if (prev !== isKnown) {
+      answered[current] = isKnown;
+      if (isKnown) { known++; unknown--; } else { known--; unknown++; }
+    }
+  }
+  updateStats();
+
+  const answeredCount = answered.filter(a => a !== null).length;
+  if (answeredCount === words.length) {
+    showResult();
+    return;
+  }
+
+  // move to next unanswered or just next
+  let next = (current + 1) % words.length;
+  current = next;
+  render();
+}
+
+function nextCard() {
+  current = (current + 1) % words.length;
+  render();
+}
+
+function prevCard() {
+  current = (current - 1 + words.length) % words.length;
+  render();
+}
+
+function updateStats() {
+  document.getElementById('known-count').textContent = known;
+  document.getElementById('unknown-count').textContent = unknown;
+  const done = answered.filter(a => a !== null).length;
+  document.getElementById('progress-fill').style.width = `${(done / words.length) * 100}%`;
+}
+
+function showResult() {
+  document.getElementById('scene').style.display = 'none';
+  document.querySelector('.btn-row').style.display = 'none';
+  document.querySelector('.nav-row').style.display = 'none';
+  document.querySelector('.flip-hint').style.display = 'none';
+  document.getElementById('result-known').textContent = known;
+  document.getElementById('result-unknown').textContent = unknown;
+  document.getElementById('result-screen').classList.add('show');
+}
+
+function restart() {
+  current = 0; known = 0; unknown = 0;
+  answered = new Array(words.length).fill(null);
+  document.getElementById('scene').style.display = '';
+  document.querySelector('.btn-row').style.display = '';
+  document.querySelector('.nav-row').style.display = '';
+  document.querySelector('.flip-hint').style.display = '';
+  document.getElementById('result-screen').classList.remove('show');
+  render();
+}
+
+// keyboard shortcuts
+document.addEventListener('keydown', e => {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  if (e.key === 'ArrowRight') nextCard();
+  if (e.key === 'ArrowLeft') prevCard();
+  if (e.key === 'o' || e.key === 'O') markCard(true);
+  if (e.key === 'x' || e.key === 'X') markCard(false);
+});
+
+render();
+</script>
+</body>
+</html>
