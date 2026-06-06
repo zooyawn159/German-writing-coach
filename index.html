@@ -18,36 +18,21 @@
       html { font-size: 16px; }
       body { background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; font-weight: 300; line-height: 1.75; min-height: 100vh; }
       .page { max-width: 760px; margin: 0 auto; padding: 3rem 2rem 6rem; }
-
-      /* masthead */
       .masthead { text-align: center; padding-bottom: 2rem; border-bottom: 1.5px solid var(--ink); margin-bottom: 2.5rem; }
       .masthead-label { font-size: 0.7rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.5rem; }
       .masthead h1 { font-family: "Playfair Display", serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; line-height: 1.1; }
       .masthead h1 em { font-style: italic; color: var(--accent); }
       .masthead-sub { margin-top: 0.6rem; font-size: 0.85rem; color: var(--ink-muted); letter-spacing: 0.03em; }
-
-      /* section label */
       .section-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
-
-      /* exam buttons */
       .exam-row { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
       .exam-btn { flex: 1; padding: 0.75rem 1rem; background: transparent; border: 1px solid var(--paper-deep); border-radius: 4px; font-family: "Playfair Display", serif; font-size: 1rem; color: var(--ink-muted); cursor: pointer; transition: all 0.15s; text-align: center; }
       .exam-btn:hover { border-color: var(--accent-muted); color: var(--ink); }
       .exam-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
       .exam-btn .exam-sub { display: block; font-family: "Source Serif 4", serif; font-size: 0.72rem; font-weight: 300; opacity: 0.75; margin-top: 0.15rem; font-style: italic; }
-
-      /* topic */
       .topic-area { margin-bottom: 2rem; }
       .topic-box { background: var(--paper-warm); border-left: 3px solid var(--accent); padding: 1.2rem 1.4rem; border-radius: 0 4px 4px 0; font-size: 0.93rem; line-height: 1.85; min-height: 80px; margin-bottom: 0.75rem; white-space: pre-wrap; }
       .topic-placeholder { color: var(--ink-faint); font-style: italic; }
       .topic-actions { display: flex; gap: 0.75rem; align-items: center; }
-
-      /* aufgabe labels inside topic */
-      .aufgabe-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); font-weight: 400; margin-bottom: 0.3rem; margin-top: 1rem; }
-      .aufgabe-label:first-child { margin-top: 0; }
-      .aufgabe-block { margin-bottom: 0.5rem; }
-
-      /* buttons */
       .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.2rem; border-radius: 3px; font-family: "Source Serif 4", serif; font-size: 0.82rem; letter-spacing: 0.04em; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
       .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
       .btn-primary:hover { background: #234832; }
@@ -55,8 +40,6 @@
       .btn-ghost { background: transparent; color: var(--ink-muted); border-color: var(--paper-deep); }
       .btn-ghost:hover { border-color: var(--ink-muted); color: var(--ink); }
       .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
-
-      /* writing */
       .writing-area { margin-bottom: 2rem; }
       .writing-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
       .word-count { font-size: 0.78rem; color: var(--ink-muted); }
@@ -66,20 +49,14 @@
       textarea:focus { border-color: var(--accent-muted); }
       textarea::placeholder { color: var(--ink-faint); font-style: italic; }
       .submit-row { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; }
-
-      /* error */
       .error-msg { background: var(--red-light); border-left: 3px solid var(--red); padding: 1rem 1.2rem; border-radius: 0 4px 4px 0; font-size: 0.88rem; color: var(--red); display: none; margin-top: 1rem; line-height: 1.6; }
       .error-msg.visible { display: block; }
-
-      /* loading */
       .loading { display: none; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--ink-muted); font-style: italic; padding: 1rem 0; }
       .loading.visible { display: flex; }
       .dots span { animation: blink 1.2s infinite; opacity: 0; }
       .dots span:nth-child(2) { animation-delay: 0.2s; }
       .dots span:nth-child(3) { animation-delay: 0.4s; }
       @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
-
-      /* result */
       .result { display: none; margin-top: 2.5rem; border-top: 1.5px solid var(--ink); padding-top: 2rem; }
       .result.visible { display: block; }
       .result-title { font-family: "Playfair Display", serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; }
@@ -93,10 +70,8 @@
       .result-section-title { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
       .result-content { font-size: 0.92rem; line-height: 1.9; white-space: pre-wrap; }
       .result-content.essay { background: var(--paper-warm); border-left: 3px solid var(--blue); padding: 1.2rem 1.4rem; border-radius: 0 4px 4px 0; font-size: 0.91rem; }
-
       .divider { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
       .footer { text-align: center; font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.05em; margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
-
       @media (max-width: 520px) {
         .page { padding: 2rem 1.2rem 4rem; }
         .exam-row { flex-direction: column; }
@@ -160,7 +135,6 @@
 
       <div class="result" id="result">
         <p class="result-title">첨삭 결과</p>
-
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-rewritten">✦</span>
@@ -168,7 +142,6 @@
           </div>
           <div class="result-content essay" id="result-rewritten"></div>
         </div>
-
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-changes">⟳</span>
@@ -176,7 +149,6 @@
           </div>
           <div class="result-content" id="result-changes"></div>
         </div>
-
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-good">✓</span>
@@ -184,7 +156,6 @@
           </div>
           <div class="result-content" id="result-good"></div>
         </div>
-
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-improve">→</span>
@@ -205,13 +176,11 @@
         document.querySelectorAll(".exam-btn").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         examType = btn.dataset.exam;
-        // 시험 유형 바꾸면 주제 초기화
         currentTopic = "";
         const box = document.getElementById("topic-box");
         box.innerHTML = '<span class="topic-placeholder">아래 버튼을 눌러 글쓰기 주제를 생성하세요.</span>';
         document.getElementById("regen-btn").style.display = "none";
-        hideError();
-        hideResult();
+        hideError(); hideResult();
       }
 
       function countWords(text) {
@@ -241,46 +210,48 @@
       // ── 주제 생성 ──
       async function generateTopic() {
         setTopicLoading(true);
-        hideError();
-        hideResult();
+        hideError(); hideResult();
         try {
           let prompt = "";
-
           if (examType === "goethe") {
-            prompt = `Du bist Prüfungsexperte für das Goethe-Zertifikat C1.
-Erstelle eine vollständige, authentische Schreibaufgabe für die Goethe C1 Prüfung mit ZWEI Aufgaben.
+            prompt = `Erstelle eine authentische Goethe-Zertifikat-C1-Schreibaufgabe mit zwei Teilen.
+Themenbereich: Arbeit, Bildung, Gesellschaft, Umwelt oder Gesundheit (wähle eines).
 
-Wähle ein Thema aus: Arbeit, Bildung, Gesellschaft, Umwelt oder Gesundheit.
+Ausgabeformat (halte dich exakt daran, keine zusätzlichen Erklärungen):
 
-Formatiere die Ausgabe GENAU so:
+AUFGABE 1 – Forumsbeitrag
+[2–3 Sätze Kontext + fiktive Statistik mit konkreten Prozentzahlen]
+Schreiben Sie einen Forumsbeitrag (ca. 230 Wörter): Kommentieren Sie die Statistik, nennen Sie Argumente und schildern Sie ein persönliches Beispiel.
 
-AUFGABE 1 – Forumsbeitrag (ca. 230 Wörter)
-[Kontext und Grafikbeschreibung: Beschreibe eine fiktive Statistik oder Grafik in Textform, z.B. Umfrageergebnisse mit konkreten Prozentzahlen]
-[Aufgabenstellung: Forumsbeitrag mit Anforderungen – Grafikkommentar, eigene Argumentation, persönliche Erfahrung/Beispiel]
+AUFGABE 2 – Formeller Brief/E-Mail
+[1–2 Sätze zur beruflichen/akademischen Situation]
+Schreiben Sie einen formellen Brief/eine E-Mail (ca. 120 Wörter) mit dem Ziel: [Beschwerde / Informationsanfrage / Stellungnahme].
 
-AUFGABE 2 – Formeller Brief / E-Mail (ca. 120 Wörter)
-[Situation im beruflichen oder akademischen Kontext]
-[Aufgabenstellung: Beschwerde, Informationsanfrage oder Stellungnahme in formellem Stil]
-
-Schreibe alles auf Deutsch. Keine zusätzlichen Erklärungen oder Musterlösungen.`;
+Nur Deutsch. Keine Musterlösung.`;
           } else {
-            prompt = `Du bist Prüfungsexperte für die telc Deutsch C1 Prüfung.
-Erstelle eine vollständige, authentische Schreibaufgabe für die telc C1 Prüfung.
+            prompt = `Erstelle eine authentische telc-Deutsch-C1-Schreibaufgabe.
+Themenbereich: Medien, Arbeit, Umwelt, Bildung oder Gesellschaft (wähle eines).
 
-Wähle ein Thema aus: Medien, Arbeit, Umwelt, Bildung oder Gesellschaft.
+Ausgabeformat (exakt so, keine zusätzlichen Erklärungen):
 
-Die Aufgabe muss folgende Elemente enthalten:
-- Kontext (kurze Situationsbeschreibung)
-- Zwei kontroverse Zitate zum Thema (von fiktiven Personen)
-- Drei konkrete Leitfragen
-- Klare Aufforderung zur strukturierten Stellungnahme (mindestens 350 Wörter) in der Reihenfolge: Einleitung → Contra 1 → Contra 2 → Pro 1 → Pro 2 → Eigene Meinung/Schluss
+Kontext: [2 Sätze zur gesellschaftlichen Relevanz des Themas]
 
-Schreibe alles auf Deutsch. Keine Musterlösung, keine Gliederung.`;
+Zitat 1: "[Aussage einer fiktiven Person, Pro-Position]" – [Name, Funktion]
+Zitat 2: "[Aussage einer fiktiven Person, Contra-Position]" – [Name, Funktion]
+
+Leitfragen:
+1. [Frage]
+2. [Frage]
+3. [Frage]
+
+Aufgabe: Verfassen Sie eine strukturierte Stellungnahme (min. 350 Wörter) in der Reihenfolge: Einleitung – Contra 1 – Contra 2 – Pro 1 – Pro 2 – Eigene Meinung/Schluss.
+
+Nur Deutsch. Keine Musterlösung.`;
           }
 
           const topic = await callAPI(prompt);
           currentTopic = topic.trim();
-          renderTopic(currentTopic);
+          document.getElementById("topic-box").textContent = currentTopic;
           document.getElementById("regen-btn").style.display = "inline-flex";
         } catch (e) {
           showError(e.message);
@@ -289,28 +260,34 @@ Schreibe alles auf Deutsch. Keine Musterlösung, keine Gliederung.`;
         }
       }
 
-      function renderTopic(text) {
-        const box = document.getElementById("topic-box");
-        box.textContent = text;
-      }
-
       function setTopicLoading(on) {
         document.getElementById("topic-loading").classList.toggle("visible", on);
         document.getElementById("gen-btn").disabled = on;
         document.getElementById("regen-btn").disabled = on;
       }
 
+      // ── 비독일어 감지 ──
+      function isNonGerman(text) {
+        const korean = /[\uAC00-\uD7AF]/;
+        const latin = /[a-zA-Z]/g;
+        const german = /[äöüÄÖÜß]|(\b(ich|du|er|sie|es|wir|ihr|und|die|der|das|ist|nicht|aber|auch|noch|wenn|dann|dass|als|mit|von|für|auf|an|in|zu|bei|nach|über|vor|unter|zwischen|ohne|durch|gegen|um|aus|seit|bis|während|wegen)\b)/i;
+        if (korean.test(text)) return true;
+        // 라틴 문자가 많은데 독일어 특징이 없으면 비독일어로 판단
+        const latinMatches = text.match(latin) || [];
+        const hasGermanFeature = german.test(text);
+        if (latinMatches.length > 30 && !hasGermanFeature) return true;
+        return false;
+      }
+
       // ── 첨삭 제출 ──
       async function submitEssay() {
         const essay = document.getElementById("essay").value.trim();
-        hideError();
-        hideResult();
+        hideError(); hideResult();
 
         if (!currentTopic) { showError("먼저 주제를 생성해 주세요."); return; }
 
-        // 조건 1: 비독일어 필터링 (기본 체크 — AI가 최종 판단)
-        const koreanPattern = /[\uAC00-\uD7AF]/;
-        if (koreanPattern.test(essay)) {
+        // 조건 1: 비독일어 필터링
+        if (isNonGerman(essay)) {
           showError("독일어로 작성된 글이 아닙니다. 올바른 독일어 문장을 입력해 주세요.");
           return;
         }
@@ -322,44 +299,44 @@ Schreibe alles auf Deutsch. Keine Musterlösung, keine Gliederung.`;
         }
 
         setEssayLoading(true);
-
         try {
           const examName = examType === "goethe" ? "Goethe-Zertifikat C1" : "TELC Deutsch C1";
           const structureRule = examType === "goethe"
-            ? "Prüfe, ob Aufgabe 1 (Forumsbeitrag mit Grafikkommentar, Argumentation, persönlichem Beispiel) und Aufgabe 2 (formeller Brief/E-Mail) klar voneinander getrennt und strukturell vollständig sind."
-            : "Prüfe streng, ob der Aufsatz die 6-Absatz-Struktur einhält: [Einleitung – Contra 1 – Contra 2 – Pro 1 – Pro 2 – Eigene Meinung/Schluss]. Weise bei Nichterfüllung klar auf strukturelle Mängel hin.";
+            ? "Prüfe, ob Aufgabe 1 (Forumsbeitrag) und Aufgabe 2 (formeller Brief/E-Mail) klar getrennt und vollständig sind."
+            : "Prüfe streng die 6-Absatz-Struktur: Einleitung – Contra 1 – Contra 2 – Pro 1 – Pro 2 – Eigene Meinung/Schluss.";
 
-          const systemPrompt = `Du bist ein strenger, erfahrener ${examName}-Prüfer und Sprachexperte auf C2-Niveau.
-Deine Aufgabe ist es, den Aufsatz eines Lernenden zu analysieren und ein vollständiges Musterschreiben zu erstellen.
+          const systemPrompt = `You are a strict ${examName} examiner and C2-level German language expert.
+Analyze the student's essay and provide feedback.
 
-VALIDIERUNGSREGELN (in dieser Reihenfolge prüfen):
-1. Ist der Text auf Deutsch verfasst? Falls nicht: Antworte NUR mit: ERROR_NOT_GERMAN
-2. Weicht der Text stark vom gegebenen Thema ab? Falls ja: Antworte NUR mit: ERROR_OFF_TOPIC
-3. ${structureRule} Falls die Struktur grob verletzt ist, weise im [VERBESSERUNGSVORSCHLÄGE]-Abschnitt klar darauf hin.
+CRITICAL LANGUAGE RULE:
+- [TEXT_REWRITTEN] section: write ONLY in German
+- [KEY_CHANGES] section: write ONLY in Korean (한국어로만 작성)
+- [STÄRKEN] section: write ONLY in Korean (한국어로만 작성)
+- [VERBESSERUNGSVORSCHLÄGE] section: write ONLY in Korean (한국어로만 작성)
+This language rule is ABSOLUTE. Do not mix languages within sections.
 
-AUSGABEFORMAT (halte dich EXAKT an diese Tags):
+VALIDATION (check in order):
+1. Is the text written in German? If not: respond ONLY with: ERROR_NOT_GERMAN
+2. Is the text clearly unrelated to the given topic? If yes: respond ONLY with: ERROR_OFF_TOPIC
+3. ${structureRule}
+
+OUTPUT FORMAT (use EXACTLY these tags, nothing outside):
 
 [TEXT_REWRITTEN]
-Schreibe den gesamten Aufsatz neu – auf C1-C2-Niveau, mit gehobener Sprache, präzisen Konnektoren und dem Stil der ${examName}-Prüfung. Behalte die Kernaussagen des Lernenden bei.${examType === "goethe" ? " Trenne Aufgabe 1 und Aufgabe 2 klar." : " Halte die 6-Absatz-Struktur strikt ein."}
+(전체 재작성 — C1-C2 수준 독일어. 학습자의 핵심 논지 유지. ${examType === "goethe" ? "Aufgabe 1과 Aufgabe 2 모두 재작성, 명확히 구분." : "6문단 구조 엄수: Einleitung – Contra 1 – Contra 2 – Pro 1 – Pro 2 – Eigene Meinung/Schluss."})
 
 [KEY_CHANGES]
-Fasse auf Koreanisch die wichtigsten Änderungen zusammen: Welche Wörter/Strukturen wurden durch C1-C2-Niveau-Ausdrücke ersetzt? Welche Konnektoren wurden eingeführt? Welche Satzstrukturen wurden überarbeitet? (5–7 Punkte, konkret und lehrreich)
+(한국어 작성 필수. 원본 → 모범 답안으로 바뀐 핵심 변경점 5–7가지. 어휘 대체, 문법 구조, 연결어 추가 등 구체적으로.)
 
 [STÄRKEN]
-Nenne auf Koreanisch 3–4 konkrete Stärken des Originals: lobenswerte Ausdrücke, gelungene Strukturen oder Argumente. Mit direktem Bezug auf Formulierungen aus dem Text.
+(한국어 작성 필수. 원본에서 칭찬할 만한 표현·구조·논거 3–4가지. 원문 표현 직접 인용하여 설명.)
 
 [VERBESSERUNGSVORSCHLÄGE]
-Gib auf Koreanisch 4–5 kritische, konkrete Verbesserungshinweise: Logik, Struktur, Stilniveau, Konnektoren, Prüfungsformat-Compliance. ${examType === "goethe" ? "Beurteile beide Aufgaben separat." : "Beurteile die Einhaltung der 6-Absatz-Struktur explizit."}`;
+(한국어 작성 필수. 논리·구조·문체·시험 형식 준수 여부에 대한 냉철한 피드백 4–5가지. ${examType === "goethe" ? "Aufgabe 1, 2 각각 평가." : "6문단 구조 준수 여부 명시적으로 평가."})`;
 
-          const prompt = `AUFGABE (Thema der Prüfung):
-${currentTopic}
-
-AUFSATZ DES LERNENDEN:
-${essay}`;
-
+          const prompt = `주제:\n${currentTopic}\n\n학습자 글:\n${essay}`;
           const raw = await callAPI(prompt, systemPrompt);
 
-          // 에러 코드 처리
           if (raw.trim().startsWith("ERROR_NOT_GERMAN")) {
             showError("독일어로 작성된 글이 아닙니다. 올바른 독일어 문장을 입력해 주세요.");
             return;
@@ -383,10 +360,12 @@ ${essay}`;
       }
 
       function parseAndShowResult(raw) {
+        const tags = ["TEXT_REWRITTEN", "KEY_CHANGES", "STÄRKEN", "VERBESSERUNGSVORSCHLÄGE"];
         const get = (tag) => {
-          const re = new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[(?:TEXT_REWRITTEN|KEY_CHANGES|STÄRKEN|VERBESSERUNGSVORSCHLÄGE)\\]|$)`, "i");
+          const escaped = tag.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const re = new RegExp(`\\[${escaped}\\]([\\s\\S]*?)(?=\\[(?:${tags.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')})\\]|$)`);
           const m = raw.match(re);
-          return m ? m[1].trim() : "(내용 없음)";
+          return m ? m[1].trim() : "";
         };
         document.getElementById("result-rewritten").textContent = get("TEXT_REWRITTEN");
         document.getElementById("result-changes").textContent   = get("KEY_CHANGES");
