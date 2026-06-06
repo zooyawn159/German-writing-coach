@@ -10,376 +10,72 @@
       rel="stylesheet"
     />
     <style>
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
-        --ink: #1a1a18;
-        --ink-muted: #6b6b62;
-        --ink-faint: #b0afa5;
-        --paper: #f7f4ee;
-        --paper-warm: #ede9e0;
-        --paper-deep: #ddd8cc;
-        --accent: #2d5a3d;
-        --accent-light: #e8f0eb;
-        --accent-muted: #7aab8a;
-        --rule: rgba(26, 26, 24, 0.12);
-        --red: #8b2a2a;
-        --red-light: #f5eaea;
+        --ink: #1a1a18; --ink-muted: #6b6b62; --ink-faint: #b0afa5;
+        --paper: #f7f4ee; --paper-warm: #ede9e0; --paper-deep: #ddd8cc;
+        --accent: #2d5a3d; --accent-light: #e8f0eb; --accent-muted: #7aab8a;
+        --rule: rgba(26, 26, 24, 0.12); --red: #8b2a2a; --red-light: #f5eaea;
       }
-      html {
-        font-size: 16px;
-      }
-      body {
-        background: var(--paper);
-        color: var(--ink);
-        font-family: "Source Serif 4", Georgia, serif;
-        font-weight: 300;
-        line-height: 1.75;
-        min-height: 100vh;
-      }
-      .page {
-        max-width: 720px;
-        margin: 0 auto;
-        padding: 3rem 2rem 6rem;
-      }
-
-      /* masthead */
-      .masthead {
-        text-align: center;
-        padding-bottom: 2rem;
-        border-bottom: 1.5px solid var(--ink);
-        margin-bottom: 2.5rem;
-      }
-      .masthead-label {
-        font-size: 0.7rem;
-        font-weight: 400;
-        letter-spacing: 0.25em;
-        text-transform: uppercase;
-        color: var(--ink-muted);
-        margin-bottom: 0.5rem;
-      }
-      .masthead h1 {
-        font-family: "Playfair Display", serif;
-        font-size: clamp(2rem, 5vw, 3rem);
-        font-weight: 600;
-        line-height: 1.1;
-      }
-      .masthead h1 em {
-        font-style: italic;
-        color: var(--accent);
-      }
-      .masthead-sub {
-        margin-top: 0.6rem;
-        font-size: 0.85rem;
-        color: var(--ink-muted);
-        letter-spacing: 0.03em;
-      }
-
-      /* section label */
-      .section-label {
-        font-size: 0.68rem;
-        letter-spacing: 0.2em;
-        text-transform: uppercase;
-        color: var(--ink-faint);
-        margin-bottom: 0.75rem;
-      }
-
-      /* exam buttons */
-      .exam-row {
-        display: flex;
-        gap: 0.75rem;
-        margin-bottom: 2rem;
-      }
-      .exam-btn {
-        flex: 1;
-        padding: 0.75rem 1rem;
-        background: transparent;
-        border: 1px solid var(--paper-deep);
-        border-radius: 4px;
-        font-family: "Playfair Display", serif;
-        font-size: 1rem;
-        color: var(--ink-muted);
-        cursor: pointer;
-        transition: all 0.15s;
-        text-align: center;
-      }
-      .exam-btn:hover {
-        border-color: var(--accent-muted);
-        color: var(--ink);
-      }
-      .exam-btn.active {
-        background: var(--accent);
-        border-color: var(--accent);
-        color: #fff;
-      }
-      .exam-btn .exam-sub {
-        display: block;
-        font-family: "Source Serif 4", serif;
-        font-size: 0.72rem;
-        font-weight: 300;
-        opacity: 0.75;
-        margin-top: 0.15rem;
-        font-style: italic;
-      }
-
-      /* topic */
-      .topic-area {
-        margin-bottom: 2rem;
-      }
-      .topic-box {
-        background: var(--paper-warm);
-        border-left: 3px solid var(--accent);
-        padding: 1.2rem 1.4rem;
-        border-radius: 0 4px 4px 0;
-        font-size: 0.95rem;
-        line-height: 1.8;
-        min-height: 80px;
-        margin-bottom: 0.75rem;
-        white-space: pre-wrap;
-      }
-      .topic-placeholder {
-        color: var(--ink-faint);
-        font-style: italic;
-      }
-      .topic-actions {
-        display: flex;
-        gap: 0.75rem;
-        align-items: center;
-      }
-
-      /* buttons */
-      .btn {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        padding: 0.55rem 1.2rem;
-        border-radius: 3px;
-        font-family: "Source Serif 4", serif;
-        font-size: 0.82rem;
-        letter-spacing: 0.04em;
-        cursor: pointer;
-        transition: all 0.15s;
-        border: 1px solid transparent;
-      }
-      .btn-primary {
-        background: var(--accent);
-        color: #fff;
-        border-color: var(--accent);
-      }
-      .btn-primary:hover {
-        background: #234832;
-      }
-      .btn-primary:disabled {
-        background: var(--ink-faint);
-        border-color: var(--ink-faint);
-        cursor: not-allowed;
-      }
-      .btn-ghost {
-        background: transparent;
-        color: var(--ink-muted);
-        border-color: var(--paper-deep);
-      }
-      .btn-ghost:hover {
-        border-color: var(--ink-muted);
-        color: var(--ink);
-      }
-      .btn-ghost:disabled {
-        opacity: 0.4;
-        cursor: not-allowed;
-      }
-
-      /* writing */
-      .writing-area {
-        margin-bottom: 2rem;
-      }
-      .writing-meta {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 0.5rem;
-      }
-      .word-count {
-        font-size: 0.78rem;
-        color: var(--ink-muted);
-      }
-      .word-count.warn {
-        color: var(--red);
-      }
-      textarea {
-        width: 100%;
-        min-height: 240px;
-        background: #fff;
-        border: 1px solid var(--paper-deep);
-        border-radius: 4px;
-        padding: 1.1rem 1.2rem;
-        font-family: "Source Serif 4", serif;
-        font-size: 0.95rem;
-        font-weight: 300;
-        line-height: 1.85;
-        color: var(--ink);
-        resize: vertical;
-        outline: none;
-        transition: border-color 0.15s;
-      }
-      textarea:focus {
-        border-color: var(--accent-muted);
-      }
-      textarea::placeholder {
-        color: var(--ink-faint);
-        font-style: italic;
-      }
-      .submit-row {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-        margin-top: 0.75rem;
-      }
-      .warn-msg {
-        font-size: 0.8rem;
-        color: var(--red);
-        display: none;
-      }
-      .warn-msg.visible {
-        display: block;
-      }
-
-      /* loading */
-      .loading {
-        display: none;
-        align-items: center;
-        gap: 0.6rem;
-        font-size: 0.82rem;
-        color: var(--ink-muted);
-        font-style: italic;
-        padding: 1rem 0;
-      }
-      .loading.visible {
-        display: flex;
-      }
-      .dots span {
-        animation: blink 1.2s infinite;
-        opacity: 0;
-      }
-      .dots span:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .dots span:nth-child(3) {
-        animation-delay: 0.4s;
-      }
-      @keyframes blink {
-        0%,
-        80%,
-        100% {
-          opacity: 0;
-        }
-        40% {
-          opacity: 1;
-        }
-      }
-
-      /* result */
-      .result {
-        display: none;
-        margin-top: 2.5rem;
-        border-top: 1.5px solid var(--ink);
-        padding-top: 2rem;
-      }
-      .result.visible {
-        display: block;
-      }
-      .result-title {
-        font-family: "Playfair Display", serif;
-        font-size: 1.3rem;
-        font-weight: 600;
-        margin-bottom: 1.5rem;
-      }
-      .result-section {
-        margin-bottom: 1.75rem;
-      }
-      .result-section-header {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        margin-bottom: 0.75rem;
-        padding-bottom: 0.4rem;
-        border-bottom: 1px solid var(--rule);
-      }
-      .result-section-icon {
-        width: 22px;
-        height: 22px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.7rem;
-        flex-shrink: 0;
-      }
-      .icon-correction {
-        background: var(--accent-light);
-        color: var(--accent);
-      }
-      .icon-good {
-        background: #e8f5e9;
-        color: #2e7d32;
-      }
-      .icon-improve {
-        background: #fff3e0;
-        color: #e65100;
-      }
-      .result-section-title {
-        font-size: 0.72rem;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-        color: var(--ink-muted);
-      }
-      .result-content {
-        font-size: 0.92rem;
-        line-height: 1.85;
-        white-space: pre-wrap;
-      }
-
-      /* error */
-      .error-msg {
-        background: var(--red-light);
-        border-left: 3px solid var(--red);
-        padding: 1rem 1.2rem;
-        border-radius: 0 4px 4px 0;
-        font-size: 0.85rem;
-        color: var(--red);
-        display: none;
-        margin-top: 1rem;
-      }
-      .error-msg.visible {
-        display: block;
-      }
-
-      .divider {
-        border: none;
-        border-top: 1px solid var(--rule);
-        margin: 2rem 0;
-      }
-      .footer {
-        text-align: center;
-        font-size: 0.72rem;
-        color: var(--ink-faint);
-        letter-spacing: 0.05em;
-        margin-top: 4rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid var(--rule);
-      }
-
+      html { font-size: 16px; }
+      body { background: var(--paper); color: var(--ink); font-family: "Source Serif 4", Georgia, serif; font-weight: 300; line-height: 1.75; min-height: 100vh; }
+      .page { max-width: 720px; margin: 0 auto; padding: 3rem 2rem 6rem; }
+      .masthead { text-align: center; padding-bottom: 2rem; border-bottom: 1.5px solid var(--ink); margin-bottom: 2.5rem; }
+      .masthead-label { font-size: 0.7rem; font-weight: 400; letter-spacing: 0.25em; text-transform: uppercase; color: var(--ink-muted); margin-bottom: 0.5rem; }
+      .masthead h1 { font-family: "Playfair Display", serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 600; line-height: 1.1; }
+      .masthead h1 em { font-style: italic; color: var(--accent); }
+      .masthead-sub { margin-top: 0.6rem; font-size: 0.85rem; color: var(--ink-muted); letter-spacing: 0.03em; }
+      .section-label { font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-faint); margin-bottom: 0.75rem; }
+      .exam-row { display: flex; gap: 0.75rem; margin-bottom: 2rem; }
+      .exam-btn { flex: 1; padding: 0.75rem 1rem; background: transparent; border: 1px solid var(--paper-deep); border-radius: 4px; font-family: "Playfair Display", serif; font-size: 1rem; color: var(--ink-muted); cursor: pointer; transition: all 0.15s; text-align: center; }
+      .exam-btn:hover { border-color: var(--accent-muted); color: var(--ink); }
+      .exam-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+      .exam-btn .exam-sub { display: block; font-family: "Source Serif 4", serif; font-size: 0.72rem; font-weight: 300; opacity: 0.75; margin-top: 0.15rem; font-style: italic; }
+      .topic-area { margin-bottom: 2rem; }
+      .topic-box { background: var(--paper-warm); border-left: 3px solid var(--accent); padding: 1.2rem 1.4rem; border-radius: 0 4px 4px 0; font-size: 0.95rem; line-height: 1.8; min-height: 80px; margin-bottom: 0.75rem; white-space: pre-wrap; }
+      .topic-placeholder { color: var(--ink-faint); font-style: italic; }
+      .topic-actions { display: flex; gap: 0.75rem; align-items: center; }
+      .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.2rem; border-radius: 3px; font-family: "Source Serif 4", serif; font-size: 0.82rem; letter-spacing: 0.04em; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
+      .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+      .btn-primary:hover { background: #234832; }
+      .btn-primary:disabled { background: var(--ink-faint); border-color: var(--ink-faint); cursor: not-allowed; }
+      .btn-ghost { background: transparent; color: var(--ink-muted); border-color: var(--paper-deep); }
+      .btn-ghost:hover { border-color: var(--ink-muted); color: var(--ink); }
+      .btn-ghost:disabled { opacity: 0.4; cursor: not-allowed; }
+      .writing-area { margin-bottom: 2rem; }
+      .writing-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+      .word-count { font-size: 0.78rem; color: var(--ink-muted); }
+      .word-count.warn { color: var(--red); }
+      textarea { width: 100%; min-height: 240px; background: #fff; border: 1px solid var(--paper-deep); border-radius: 4px; padding: 1.1rem 1.2rem; font-family: "Source Serif 4", serif; font-size: 0.95rem; font-weight: 300; line-height: 1.85; color: var(--ink); resize: vertical; outline: none; transition: border-color 0.15s; }
+      textarea:focus { border-color: var(--accent-muted); }
+      textarea::placeholder { color: var(--ink-faint); font-style: italic; }
+      .submit-row { display: flex; align-items: center; gap: 1rem; margin-top: 0.75rem; }
+      .warn-msg { font-size: 0.8rem; color: var(--red); display: none; }
+      .warn-msg.visible { display: block; }
+      .loading { display: none; align-items: center; gap: 0.6rem; font-size: 0.82rem; color: var(--ink-muted); font-style: italic; padding: 1rem 0; }
+      .loading.visible { display: flex; }
+      .dots span { animation: blink 1.2s infinite; opacity: 0; }
+      .dots span:nth-child(2) { animation-delay: 0.2s; }
+      .dots span:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes blink { 0%,80%,100%{opacity:0} 40%{opacity:1} }
+      .result { display: none; margin-top: 2.5rem; border-top: 1.5px solid var(--ink); padding-top: 2rem; }
+      .result.visible { display: block; }
+      .result-title { font-family: "Playfair Display", serif; font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; }
+      .result-section { margin-bottom: 1.75rem; }
+      .result-section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.75rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--rule); }
+      .result-section-icon { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; flex-shrink: 0; }
+      .icon-correction { background: var(--accent-light); color: var(--accent); }
+      .icon-good { background: #e8f5e9; color: #2e7d32; }
+      .icon-improve { background: #fff3e0; color: #e65100; }
+      .result-section-title { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--ink-muted); }
+      .result-content { font-size: 0.92rem; line-height: 1.85; white-space: pre-wrap; }
+      .error-msg { background: var(--red-light); border-left: 3px solid var(--red); padding: 1rem 1.2rem; border-radius: 0 4px 4px 0; font-size: 0.85rem; color: var(--red); display: none; margin-top: 1rem; }
+      .error-msg.visible { display: block; }
+      .divider { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
+      .footer { text-align: center; font-size: 0.72rem; color: var(--ink-faint); letter-spacing: 0.05em; margin-top: 4rem; padding-top: 1.5rem; border-top: 1px solid var(--rule); }
       @media (max-width: 520px) {
-        .page {
-          padding: 2rem 1.2rem 4rem;
-        }
-        .exam-row {
-          flex-direction: column;
-        }
+        .page { padding: 2rem 1.2rem 4rem; }
+        .exam-row { flex-direction: column; }
       }
     </style>
   </head>
@@ -394,11 +90,7 @@
       <div>
         <p class="section-label">시험 유형</p>
         <div class="exam-row">
-          <button
-            class="exam-btn active"
-            data-exam="goethe"
-            onclick="selectExam(this)"
-          >
+          <button class="exam-btn active" data-exam="goethe" onclick="selectExam(this)">
             Goethe C1<span class="exam-sub">Goethe-Zertifikat</span>
           </button>
           <button class="exam-btn" data-exam="telc" onclick="selectExam(this)">
@@ -410,30 +102,13 @@
       <div class="topic-area">
         <p class="section-label">오늘의 주제</p>
         <div class="topic-box" id="topic-box">
-          <span class="topic-placeholder"
-            >아래 버튼을 눌러 글쓰기 주제를 생성하세요.</span
-          >
+          <span class="topic-placeholder">아래 버튼을 눌러 글쓰기 주제를 생성하세요.</span>
         </div>
         <div class="topic-actions">
-          <button
-            class="btn btn-primary"
-            id="gen-btn"
-            onclick="generateTopic()"
-          >
-            주제 생성
-          </button>
-          <button
-            class="btn btn-ghost"
-            id="regen-btn"
-            onclick="generateTopic()"
-            style="display: none"
-          >
-            ↺ 다른 주제
-          </button>
+          <button class="btn btn-primary" id="gen-btn" onclick="generateTopic()">주제 생성</button>
+          <button class="btn btn-ghost" id="regen-btn" onclick="generateTopic()" style="display:none">↺ 다른 주제</button>
           <div class="loading" id="topic-loading">
-            AI가 주제를 구성하는 중<span class="dots"
-              ><span>.</span><span>.</span><span>.</span></span
-            >
+            AI가 주제를 구성하는 중<span class="dots"><span>.</span><span>.</span><span>.</span></span>
           </div>
         </div>
       </div>
@@ -446,29 +121,17 @@
           <span></span>
           <span class="word-count" id="word-count">0 단어</span>
         </div>
-        <textarea
-          id="essay"
+        <textarea id="essay"
           placeholder="여기에 독일어로 글을 작성하세요. C1 수준의 어휘와 문법을 사용해 보세요."
-          oninput="updateWordCount()"
-        ></textarea>
+          oninput="updateWordCount()"></textarea>
         <div class="submit-row">
-          <button
-            class="btn btn-primary"
-            id="submit-btn"
-            onclick="submitEssay()"
-          >
-            첨삭 받기
-          </button>
-          <span class="warn-msg" id="warn-msg"
-            >최소 50단어 이상 작성해 주세요.</span
-          >
+          <button class="btn btn-primary" id="submit-btn" onclick="submitEssay()">첨삭 받기</button>
+          <span class="warn-msg" id="warn-msg">최소 50단어 이상 작성해 주세요.</span>
         </div>
       </div>
 
       <div class="loading" id="essay-loading">
-        첨삭 중<span class="dots"
-          ><span>.</span><span>.</span><span>.</span></span
-        >
+        첨삭 중<span class="dots"><span>.</span><span>.</span><span>.</span></span>
       </div>
       <div class="error-msg" id="error-msg"></div>
 
@@ -477,9 +140,7 @@
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-correction">✎</span>
-            <span class="result-section-title"
-              >수정 예시 — Korrekturbeispiele</span
-            >
+            <span class="result-section-title">수정 예시 — Korrekturbeispiele</span>
           </div>
           <div class="result-content" id="result-correction"></div>
         </div>
@@ -493,9 +154,7 @@
         <div class="result-section">
           <div class="result-section-header">
             <span class="result-section-icon icon-improve">→</span>
-            <span class="result-section-title"
-              >개선점 — Verbesserungsvorschläge</span
-            >
+            <span class="result-section-title">개선점 — Verbesserungsvorschläge</span>
           </div>
           <div class="result-content" id="result-improve"></div>
         </div>
@@ -504,25 +163,18 @@
       <footer class="footer">Schreibtrainer C1 · Powered by Groq API</footer>
     </div>
 
+    <!-- API 키는 config.js에서 불러옵니다. config.js는 .gitignore에 등록되어 있습니다. -->
+    <script src="config.js"></script>
     <script>
-      // ── API 키 — Groq 전용 키 입력 ──
-      const GROQ_API_KEY =
-        " ";
-
-      // ── 상태 ──
       let examType = "goethe";
       let currentTopic = "";
 
-      // ── 시험 유형 선택 ──
       function selectExam(btn) {
-        document
-          .querySelectorAll(".exam-btn")
-          .forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".exam-btn").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
         examType = btn.dataset.exam;
       }
 
-      // ── 단어 수 ──
       function countWords(text) {
         return text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
       }
@@ -533,43 +185,35 @@
         el.classList.toggle("warn", n > 0 && n < 50);
       }
 
-      // ── Groq API 호출 함수 ──
       async function callGroq(prompt) {
-        const res = await fetch(
-          "https://api.groq.com/openai/v1/chat/completions",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${GROQ_API_KEY}`,
-            },
-            body: JSON.stringify({
-              model: "llama-3.3-70b-versatile", // 한국어 번역 및 독일어 C1 이해도가 높은 최신 고성능 모델
-              messages: [{ role: "user", content: prompt }],
-              temperature: 0.7,
-              max_tokens: 2048,
-            }),
+        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${GROQ_API_KEY}`,
           },
-        );
+          body: JSON.stringify({
+            model: "llama-3.3-70b-versatile",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7,
+            max_tokens: 2048,
+          }),
+        });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(
-            err?.error?.message || `Groq API 오류 (${res.status})`,
-          );
+          throw new Error(err?.error?.message || `Groq API 오류 (${res.status})`);
         }
         const data = await res.json();
         return data.choices?.[0]?.message?.content ?? "";
       }
 
-      // ── 주제 생성 ──
       async function generateTopic() {
         setTopicLoading(true);
         hideError();
         try {
-          const examName =
-            examType === "goethe" ? "Goethe-Zertifikat C1" : "TELC Deutsch C1";
+          const examName = examType === "goethe" ? "Goethe-Zertifikat C1" : "TELC Deutsch C1";
           const prompt = `Du bist ein Prüfungsexperte für ${examName}.
-Erstelle ein realistisches Thema für den Prüfungsteil „Schreiben“ der telc Deutsch C1 Prüfung.
+Erstelle ein realistisches Thema für den Prüfungsteil „Schreiben" der telc Deutsch C1 Prüfung.
 Die Aufgabe soll aus:
 - einer kurzen Einleitung mit Kontext,
 - einem Zitat oder einer Statistik als Impuls,
@@ -579,8 +223,6 @@ bestehen.
 Das Thema soll einem aktuellen gesellschaftlichen, wirtschaftlichen, technologischen, bildungsbezogenen, ökologischen oder kulturellen Diskussionsfeld entstammen und eine kontroverse Fragestellung enthalten, die sowohl Vor- als auch Nachteile zulässt.
 Die Aufgabe muss die Kandidaten dazu auffordern, eine strukturierte Stellungnahme von mindestens 350 Wörtern zu verfassen, Argumente abzuwägen, Beispiele einzubeziehen und eine begründete persönliche Meinung zu vertreten.
 Formatiere die Ausgabe ausschließlich wie eine authentische telc-C1-Schreibaufgabe auf Deutsch. Gib keine Lösung, keine Gliederung und keine zusätzlichen Erklärungen aus.`;
-
-          // 여기서 기존 callGemini 대신 callGroq 호출
           const topic = await callGroq(prompt);
           currentTopic = topic.trim();
           const box = document.getElementById("topic-box");
@@ -595,14 +237,11 @@ Formatiere die Ausgabe ausschließlich wie eine authentische telc-C1-Schreibaufg
       }
 
       function setTopicLoading(on) {
-        document
-          .getElementById("topic-loading")
-          .classList.toggle("visible", on);
+        document.getElementById("topic-loading").classList.toggle("visible", on);
         document.getElementById("gen-btn").disabled = on;
         document.getElementById("regen-btn").disabled = on;
       }
 
-      // ── 첨삭 제출 ──
       async function submitEssay() {
         const essay = document.getElementById("essay").value.trim();
         document.getElementById("warn-msg").classList.remove("visible");
@@ -610,18 +249,14 @@ Formatiere die Ausgabe ausschließlich wie eine authentische telc-C1-Schreibaufg
           document.getElementById("warn-msg").classList.add("visible");
           return;
         }
-        if (!currentTopic) {
-          showError("먼저 주제를 생성해 주세요.");
-          return;
-        }
+        if (!currentTopic) { showError("먼저 주제를 생성해 주세요."); return; }
 
         setEssayLoading(true);
         hideError();
         hideResult();
 
         try {
-          const examName =
-            examType === "goethe" ? "Goethe-Zertifikat C1" : "TELC Deutsch C1";
+          const examName = examType === "goethe" ? "Goethe-Zertifikat C1" : "TELC Deutsch C1";
           const prompt = `Du bist ein erfahrener Prüfer für ${examName}.
 Analysiere den folgenden deutschen Aufsatz eines Lernenden auf C1-Niveau.
 
@@ -644,8 +279,6 @@ Zeige 3–5 konkrete Sätze mit Fehlern. Format:
 
 [VERBESSERUNGSVORSCHLÄGE]
 3–4 konkrete Verbesserungsvorschläge auf Koreanisch, mit Begründung aus C1-Perspektive.`;
-
-          // 여기서 기존 callGemini 대신 callGroq 호출
           const raw = await callGroq(prompt);
           parseAndShowResult(raw);
         } catch (e) {
@@ -656,42 +289,30 @@ Zeige 3–5 konkrete Sätze mit Fehlern. Format:
       }
 
       function setEssayLoading(on) {
-        document
-          .getElementById("essay-loading")
-          .classList.toggle("visible", on);
+        document.getElementById("essay-loading").classList.toggle("visible", on);
         document.getElementById("submit-btn").disabled = on;
       }
 
-      // ── 결과 파싱 ──
       function parseAndShowResult(raw) {
         const get = (tag) => {
           const re = new RegExp(`\\[${tag}\\]([\\s\\S]*?)(?=\\[|$)`, "i");
           const m = raw.match(re);
           return m ? m[1].trim() : "";
         };
-        document.getElementById("result-correction").textContent =
-          get("KORREKTURBEISPIELE");
+        document.getElementById("result-correction").textContent = get("KORREKTURBEISPIELE");
         document.getElementById("result-good").textContent = get("STÄRKEN");
-        document.getElementById("result-improve").textContent = get(
-          "VERBESSERUNGSVORSCHLÄGE",
-        );
+        document.getElementById("result-improve").textContent = get("VERBESSERUNGSVORSCHLÄGE");
         document.getElementById("result").classList.add("visible");
-        document
-          .getElementById("result")
-          .scrollIntoView({ behavior: "smooth", block: "start" });
+        document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "start" });
       }
 
-      function hideResult() {
-        document.getElementById("result").classList.remove("visible");
-      }
+      function hideResult() { document.getElementById("result").classList.remove("visible"); }
       function showError(msg) {
         const el = document.getElementById("error-msg");
         el.textContent = "오류: " + msg;
         el.classList.add("visible");
       }
-      function hideError() {
-        document.getElementById("error-msg").classList.remove("visible");
-      }
+      function hideError() { document.getElementById("error-msg").classList.remove("visible"); }
     </script>
   </body>
 </html>
