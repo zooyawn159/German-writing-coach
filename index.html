@@ -268,14 +268,26 @@ Nur Deutsch. Keine Musterlösung.`;
 
       // ── 비독일어 감지 ──
       function isNonGerman(text) {
-        const korean = /[\uAC00-\uD7AF]/;
-        const latin = /[a-zA-Z]/g;
-        const german = /[äöüÄÖÜß]|(\b(ich|du|er|sie|es|wir|ihr|und|die|der|das|ist|nicht|aber|auch|noch|wenn|dann|dass|als|mit|von|für|auf|an|in|zu|bei|nach|über|vor|unter|zwischen|ohne|durch|gegen|um|aus|seit|bis|während|wegen)\b)/i;
-        if (korean.test(text)) return true;
-        // 라틴 문자가 많은데 독일어 특징이 없으면 비독일어로 판단
-        const latinMatches = text.match(latin) || [];
-        const hasGermanFeature = german.test(text);
-        if (latinMatches.length > 30 && !hasGermanFeature) return true;
+        // 한국어, 일본어, 중국어, 아랍어, 러시아어 등 비라틴 문자 즉시 차단
+        if (/[\uAC00-\uD7AF\u3040-\u30FF\u4E00-\u9FFF\u0600-\u06FF\u0400-\u04FF]/.test(text)) return true;
+
+        // 독일어 특징 (움라우트, ß, 핵심 독일어 단어)
+        const germanFeature = /[äöüÄÖÜß]|\b(ich|du|er|sie|es|wir|ihr|und|die|der|das|ist|nicht|aber|auch|noch|wenn|dann|dass|als|mit|von|für|auf|an|in|zu|bei|nach|über|vor|unter|zwischen|ohne|durch|gegen|um|aus|seit|bis|während|wegen|werden|haben|sein|können|müssen|sollen|dürfen|wollen|wurden|hatte|wurde)\b/i;
+        const hasGerman = germanFeature.test(text);
+        if (hasGerman) return false; // 독일어 특징 있으면 통과
+
+        // 영어 고빈도 단어 감지
+        const englishWords = (text.match(/\b(the|is|are|was|were|have|has|had|will|would|could|should|can|may|might|do|does|did|this|that|with|from|they|their|there|what|when|where|which|who|how|about|your|more|also|just|like|some|very|been|being|these|those|into|than|then)\b/gi) || []).length;
+        if (englishWords >= 5) return true;
+
+        // 프랑스어 고빈도 단어 감지
+        const frenchWords = (text.match(/\b(le|la|les|un|une|des|est|sont|était|avec|pour|dans|sur|par|que|qui|ne|pas|plus|très|aussi|comme|mais|donc|car|je|tu|il|elle|nous|vous|ils|elles|ce|cette|ces|mon|ton|son|notre|votre|leur)\b/gi) || []).length;
+        if (frenchWords >= 5) return true;
+
+        // 스페인어/이탈리아어 고빈도 단어 감지
+        const romanicWords = (text.match(/\b(el|la|los|las|un|una|es|son|era|con|por|para|que|qui|non|sono|era|con|per|una|questo|questa|pero|porque|también|también|muy|como|cuando|donde|hay|tiene|tienen|essere|avere)\b/gi) || []).length;
+        if (romanicWords >= 5) return true;
+
         return false;
       }
 
@@ -308,16 +320,16 @@ Nur Deutsch. Keine Musterlösung.`;
           const systemPrompt = `You are a strict ${examName} examiner and C2-level German language expert.
 Analyze the student's essay and provide feedback.
 
-CRITICAL LANGUAGE RULE:
-- [TEXT_REWRITTEN] section: write ONLY in German
-- [KEY_CHANGES] section: write ONLY in Korean (한국어로만 작성)
-- [STÄRKEN] section: write ONLY in Korean (한국어로만 작성)
-- [VERBESSERUNGSVORSCHLÄGE] section: write ONLY in Korean (한국어로만 작성)
-This language rule is ABSOLUTE. Do not mix languages within sections.
+ABSOLUTE LANGUAGE RULES — NEVER VIOLATE:
+- [TEXT_REWRITTEN]: German ONLY. Zero Korean, English, Japanese, French, or any other language.
+- [KEY_CHANGES]: Korean (한국어) ONLY. Zero German, English, Japanese, or any other language. Every single sentence must be in Korean.
+- [STÄRKEN]: Korean (한국어) ONLY. Every single sentence must be in Korean.
+- [VERBESSERUNGSVORSCHLÄGE]: Korean (한국어) ONLY. Every single sentence must be in Korean.
+If you find yourself writing in any other language in the Korean sections, STOP and rewrite in Korean.
+Do NOT mix languages. Do NOT use Japanese characters (まず, さらに etc.) anywhere.
 
 VALIDATION (check in order):
-1. Is the text written in German? If not: respond ONLY with: ERROR_NOT_GERMAN
-2. Is the text clearly unrelated to the given topic? If yes: respond ONLY with: ERROR_OFF_TOPIC
+1. Is the text clearly unrelated to the given topic? If yes: respond ONLY with: ERROR_OFF_TOPIC
 3. ${structureRule}
 
 OUTPUT FORMAT (use EXACTLY these tags, nothing outside):
@@ -337,10 +349,6 @@ OUTPUT FORMAT (use EXACTLY these tags, nothing outside):
           const prompt = `주제:\n${currentTopic}\n\n학습자 글:\n${essay}`;
           const raw = await callAPI(prompt, systemPrompt);
 
-          if (raw.trim().startsWith("ERROR_NOT_GERMAN")) {
-            showError("독일어로 작성된 글이 아닙니다. 올바른 독일어 문장을 입력해 주세요.");
-            return;
-          }
           if (raw.trim().startsWith("ERROR_OFF_TOPIC")) {
             showError("제시된 주제와 무관한 내용입니다. 주제에 맞는 글을 작성해 주세요.");
             return;
