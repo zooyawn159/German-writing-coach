@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Schreibtrainer C1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
       :root {
@@ -163,8 +160,6 @@
       <footer class="footer">Schreibtrainer C1 · Powered by Groq API</footer>
     </div>
 
-    <!-- API 키는 config.js에서 불러옵니다. config.js는 .gitignore에 등록되어 있습니다. -->
-    <script src="config.js"></script>
     <script>
       let examType = "goethe";
       let currentTopic = "";
@@ -185,26 +180,19 @@
         el.classList.toggle("warn", n > 0 && n < 50);
       }
 
-      async function callGroq(prompt) {
-        const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+      // Groq를 직접 부르지 않고 /api/chat (Vercel 서버리스)을 통해 호출
+      async function callAPI(prompt) {
+        const res = await fetch("/api/chat", {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${GROQ_API_KEY}`,
-          },
-          body: JSON.stringify({
-            model: "llama-3.3-70b-versatile",
-            messages: [{ role: "user", content: prompt }],
-            temperature: 0.7,
-            max_tokens: 2048,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ prompt }),
         });
         if (!res.ok) {
           const err = await res.json().catch(() => ({}));
-          throw new Error(err?.error?.message || `Groq API 오류 (${res.status})`);
+          throw new Error(err?.error || `API 오류 (${res.status})`);
         }
         const data = await res.json();
-        return data.choices?.[0]?.message?.content ?? "";
+        return data.text ?? "";
       }
 
       async function generateTopic() {
@@ -223,7 +211,7 @@ bestehen.
 Das Thema soll einem aktuellen gesellschaftlichen, wirtschaftlichen, technologischen, bildungsbezogenen, ökologischen oder kulturellen Diskussionsfeld entstammen und eine kontroverse Fragestellung enthalten, die sowohl Vor- als auch Nachteile zulässt.
 Die Aufgabe muss die Kandidaten dazu auffordern, eine strukturierte Stellungnahme von mindestens 350 Wörtern zu verfassen, Argumente abzuwägen, Beispiele einzubeziehen und eine begründete persönliche Meinung zu vertreten.
 Formatiere die Ausgabe ausschließlich wie eine authentische telc-C1-Schreibaufgabe auf Deutsch. Gib keine Lösung, keine Gliederung und keine zusätzlichen Erklärungen aus.`;
-          const topic = await callGroq(prompt);
+          const topic = await callAPI(prompt);
           currentTopic = topic.trim();
           const box = document.getElementById("topic-box");
           box.innerHTML = "";
@@ -279,7 +267,7 @@ Zeige 3–5 konkrete Sätze mit Fehlern. Format:
 
 [VERBESSERUNGSVORSCHLÄGE]
 3–4 konkrete Verbesserungsvorschläge auf Koreanisch, mit Begründung aus C1-Perspektive.`;
-          const raw = await callGroq(prompt);
+          const raw = await callAPI(prompt);
           parseAndShowResult(raw);
         } catch (e) {
           showError(e.message);
