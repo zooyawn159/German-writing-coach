@@ -5,8 +5,12 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt } = req.body;
+  const { prompt, systemPrompt } = req.body;
   if (!prompt) return res.status(400).json({ error: 'prompt is required' });
+
+  const messages = [];
+  if (systemPrompt) messages.push({ role: 'system', content: systemPrompt });
+  messages.push({ role: 'user', content: prompt });
 
   const groqRes = await fetch('https://api.groq.com/openai/v1/chat/completions', {
     method: 'POST',
@@ -16,9 +20,9 @@ module.exports = async function handler(req, res) {
     },
     body: JSON.stringify({
       model: 'llama-3.3-70b-versatile',
-      messages: [{ role: 'user', content: prompt }],
+      messages,
       temperature: 0.7,
-      max_tokens: 2048,
+      max_tokens: 4096,
     }),
   });
 
