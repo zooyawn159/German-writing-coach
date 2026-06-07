@@ -32,7 +32,13 @@
       .topic-area { margin-bottom: 2rem; }
       .topic-box { background: var(--paper-warm); border-left: 3px solid var(--accent); padding: 1.2rem 1.4rem; border-radius: 0 4px 4px 0; font-size: 0.93rem; line-height: 1.85; min-height: 80px; margin-bottom: 0.75rem; white-space: pre-wrap; }
       .topic-placeholder { color: var(--ink-faint); font-style: italic; }
-      .topic-actions { display: flex; gap: 0.75rem; align-items: center; }
+      .topic-actions { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
+      .topic-mode-row { display: flex; gap: 0; margin-bottom: 0.85rem; border: 1px solid var(--paper-deep); border-radius: 4px; overflow: hidden; width: fit-content; }
+      .topic-mode-btn { padding: 0.45rem 1.1rem; background: transparent; border: none; font-family: "Source Serif 4", serif; font-size: 0.8rem; color: var(--ink-muted); cursor: pointer; transition: all 0.15s; letter-spacing: 0.03em; }
+      .topic-mode-btn:first-child { border-right: 1px solid var(--paper-deep); }
+      .topic-mode-btn.active { background: var(--accent); color: #fff; }
+      .topic-input { display: none; width: 100%; min-height: 120px; background: #fff; border: 1px solid var(--accent-muted); border-radius: 4px; padding: 1rem 1.2rem; font-family: "Source Serif 4", serif; font-size: 0.93rem; font-weight: 300; line-height: 1.85; color: var(--ink); resize: vertical; outline: none; margin-bottom: 0.75rem; }
+      .topic-input.visible { display: block; }
       .btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.55rem 1.2rem; border-radius: 3px; font-family: "Source Serif 4", serif; font-size: 0.82rem; letter-spacing: 0.04em; cursor: pointer; transition: all 0.15s; border: 1px solid transparent; }
       .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
       .btn-primary:hover { background: #234832; }
@@ -100,14 +106,29 @@
 
       <div class="topic-area">
         <p class="section-label">오늘의 주제</p>
-        <div class="topic-box" id="topic-box">
-          <span class="topic-placeholder">아래 버튼을 눌러 글쓰기 주제를 생성하세요.</span>
+        <div class="topic-mode-row">
+          <button class="topic-mode-btn active" id="mode-manual" onclick="setTopicMode('manual')">✎ 직접 입력</button>
+          <button class="topic-mode-btn" id="mode-ai" onclick="setTopicMode('ai')">✦ AI 생성</button>
         </div>
-        <div class="topic-actions">
-          <button class="btn btn-primary" id="gen-btn" onclick="generateTopic()">주제 생성</button>
-          <button class="btn btn-ghost" id="regen-btn" onclick="generateTopic()" style="display:none">↺ 다른 주제</button>
-          <div class="loading" id="topic-loading">
-            AI가 주제를 구성하는 중<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+
+        <!-- 직접 입력 모드 -->
+        <div id="manual-area">
+          <textarea class="topic-input visible" id="topic-input"
+            placeholder="주제를 직접 독일어로 입력하세요..."
+            oninput="onTopicInput()"></textarea>
+        </div>
+
+        <!-- AI 생성 모드 -->
+        <div id="ai-area" style="display:none">
+          <div class="topic-box" id="topic-box">
+            <span class="topic-placeholder">아래 버튼을 눌러 주제를 생성하세요.</span>
+          </div>
+          <div class="topic-actions">
+            <button class="btn btn-primary" id="gen-btn" onclick="generateTopic()">주제 생성</button>
+            <button class="btn btn-ghost" id="regen-btn" onclick="generateTopic()" style="display:none">↺ 다른 주제</button>
+            <div class="loading" id="topic-loading">
+              AI가 주제를 구성하는 중<span class="dots"><span>.</span><span>.</span><span>.</span></span>
+            </div>
           </div>
         </div>
       </div>
@@ -180,6 +201,9 @@
         const box = document.getElementById("topic-box");
         box.innerHTML = '<span class="topic-placeholder">아래 버튼을 눌러 글쓰기 주제를 생성하세요.</span>';
         document.getElementById("regen-btn").style.display = "none";
+        document.getElementById("topic-input").value = "";
+        document.getElementById("topic-box").innerHTML = '<span class="topic-placeholder">아래 버튼을 눌러 주제를 생성하세요.</span>';
+        currentTopic = "";
         hideError(); hideResult();
       }
 
@@ -229,8 +253,25 @@ Schreiben Sie einen formellen Brief/eine E-Mail (ca. 120 Wörter) mit dem Ziel: 
 
 Nur Deutsch. Keine Musterlösung.`;
           } else {
-            prompt = `Erstelle eine authentische telc-Deutsch-C1-Schreibaufgabe.
-Themenbereich: Medien, Arbeit, Umwelt, Bildung oder Gesellschaft (wähle eines).
+            const telcTopics = [
+              "Homeoffice und die Zukunft der Arbeit",
+              "Studiengebühren an Hochschulen",
+              "Kernenergie als Lösung für die Energiekrise",
+              "Vegetarische Ernährung als gesellschaftliche Pflicht",
+              "Überwachungskameras im öffentlichen Raum",
+              "Verpflichtender Zivildienst für alle",
+              "Gentechnisch veränderte Lebensmittel",
+              "Tempolimit auf Autobahnen",
+              "Künstliche Intelligenz im Bildungssystem",
+              "Legalisierung von Cannabis",
+              "Elternzeit für Väter als Pflicht",
+              "Privatisierung öffentlicher Verkehrsmittel",
+              "Massentierhaltung und Tierschutz",
+              "Datenschutz vs. Sicherheit im Internet",
+              "Globalisierung und lokale Wirtschaft"
+            ];
+            const randomTopic = telcTopics[Math.floor(Math.random() * telcTopics.length)];
+            prompt = `Erstelle eine authentische telc-Deutsch-C1-Schreibaufgabe zum Thema: "${randomTopic}".
 
 Ausgabeformat (exakt so, keine zusätzlichen Erklärungen):
 
@@ -247,12 +288,19 @@ Leitfragen:
 Aufgabe: Verfassen Sie eine strukturierte Stellungnahme (min. 350 Wörter) in der Reihenfolge: Einleitung – Contra 1 – Contra 2 – Pro 1 – Pro 2 – Eigene Meinung/Schluss.
 
 Nur Deutsch. Keine Musterlösung.`;
+
           }
 
           const topic = await callAPI(prompt);
           currentTopic = topic.trim();
           document.getElementById("topic-box").textContent = currentTopic;
           document.getElementById("regen-btn").style.display = "inline-flex";
+          document.getElementById("edit-btn").style.display = "inline-flex";
+          // sync to textarea too
+          document.getElementById("topic-input").value = currentTopic;
+          // hide edit mode if open
+          document.getElementById("topic-input").classList.remove("visible");
+          document.getElementById("topic-box").style.display = "";
         } catch (e) {
           showError(e.message);
         } finally {
@@ -381,6 +429,21 @@ OUTPUT FORMAT (use EXACTLY these tags, nothing outside):
         document.getElementById("result-improve").textContent   = get("VERBESSERUNGSVORSCHLÄGE");
         document.getElementById("result").classList.add("visible");
         document.getElementById("result").scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function setTopicMode(mode) {
+        document.getElementById("mode-manual").classList.toggle("active", mode === "manual");
+        document.getElementById("mode-ai").classList.toggle("active", mode === "ai");
+        document.getElementById("manual-area").style.display = mode === "manual" ? "" : "none";
+        document.getElementById("ai-area").style.display = mode === "ai" ? "" : "none";
+        if (mode === "manual") {
+          document.getElementById("topic-input").focus();
+        }
+        hideError(); hideResult();
+      }
+
+      function onTopicInput() {
+        currentTopic = document.getElementById("topic-input").value.trim();
       }
 
       function hideResult() { document.getElementById("result").classList.remove("visible"); }
